@@ -18,7 +18,7 @@ interface VerifyEmailProps {
     otp: string;
 }
 
-export default function VerifyEmail(name, otp): VerifyEmailProps {
+export default function VerifyEmail({name, otp}: VerifyEmailProps) {
     return (
         <Html lang="en" dir='ltr'>
             <Head>
@@ -41,20 +41,22 @@ export default function VerifyEmail(name, otp): VerifyEmailProps {
 
             <Section>
                 <Row>
-                    <Heading>Hi {name},</Heading>
+                    <Heading as='h2'>Hi {name},</Heading>
                 </Row>
                 <Row>
                     <Text>
-                        Here&apos;s your verification code: {otp}
+                       Thank you for registering, please use the following verification code to complete your registration:
                     </Text>
                 </Row>
                 <Row>
-                    <Button href={url} target='_blank'>
-                        Verify Email
-                    </Button>
+                    {otp}
+                </Row>
+                <Row>
+                   <Text>
+                    If you did not request this code, please ignore this email.
+                   </Text>
                 </Row>
             </Section>
         </Html>
     );
 }
-
