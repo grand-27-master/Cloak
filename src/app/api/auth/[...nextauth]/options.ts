@@ -14,19 +14,29 @@ const options: NextAuthOptions = {
           id: "credentials",
         
           credentials: {
-            email: { label: "Email", type: "email", placeholder: "jsmith" },
+            email: { label: "Email", type: "email"},
             password: { label: "Password", type: "password" }
           },
           async authorize(credentials:any): Promise<any> {
             await dbConnect();
             
             try {
-                const user = await UserModel.findOne({ email: credentials.email }, {name:credentials.name});
-                if (user && bcrypt.compareSync(credentials.password, user.password)) {
+                const user = await UserModel.findOne({$or:[{ email: credentials.identifier }, {name:credentials.identifier}],});
+                if (!user) {
+                    throw new Error('No user found with this email');
+                  }
+                  if (!user.isVerified) {
+                    throw new Error('Please verify your account before logging in');
+                  }
+                  const isPasswordCorrect = await bcrypt.compare(
+                    credentials.password,
+                    user.password
+                  );
+                  if (isPasswordCorrect) {
                     return user;
-                } else {
-                    throw new Error("Invalid credentials");
-                }
+                  } else {
+                    throw new Error('Incorrect password');
+                  }
                 }
             catch (error) {
                 console.log("Failed to authorize user",error);
@@ -37,7 +47,7 @@ const options: NextAuthOptions = {
       ],
 
       pages: {
-        signIn: "/signin"
+        signIn: "/sign-in"
       },
 
 
@@ -50,7 +60,7 @@ const options: NextAuthOptions = {
     callbacks: {
         async jwt({token, user}) {
             if (user) {
-                token.id = user.id;
+                token.id = user.id?.toString();
                 token.name = user.name;
                 token.isVerified = user.isVerified;
                 token.isAcceptingMessages = user.isAcceptingMessages;
