@@ -153,7 +153,7 @@ function UserDashboard() {
       <div className="mb-4">
         <Switch
           {...register('acceptMessages')}
-          checked={acceptMessages}
+          checked={acceptMessages as boolean}
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
         />
@@ -181,7 +181,7 @@ function UserDashboard() {
         {messages.length > 0 ? (
           messages.map((message, index) => (
             <MessageCard
-              key={message._id as typeof Key | null | undefined}
+              key={message.id}
               message={message}
               onMessageDelete={handleDeleteMessage}
             />
