@@ -2,10 +2,8 @@ import dbConnect from "@/lib/dbConnect";
 import User from "@/model/User";
 import sendVerificationEmail from "@/helpers/sendVerificationEmail";
 import bcrypt from "bcryptjs";
-import exp from "constants";
-import { verify } from "crypto";
 
-export default async function POST(request:Request)
+export async function POST(request:Request)
 {
     await dbConnect(); 
     
@@ -78,6 +76,6 @@ export default async function POST(request:Request)
     catch(error)
     {
         console.log('Error in user registration',error);
-        return Response.json({success:false,message:'Failed to register user'},{status:500});
+        return new Response(JSON.stringify({ success: false, message: 'Failed to register user' }), { status: 500 });
     }
 }
