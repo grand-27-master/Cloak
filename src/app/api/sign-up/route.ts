@@ -7,8 +7,7 @@ import { verify } from "crypto";
 
 export default async function POST(request:Request)
 {
-    await dbConnect();
-    
+    await dbConnect(); 
     
     try
     {
