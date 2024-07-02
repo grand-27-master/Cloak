@@ -52,10 +52,10 @@ export default function SendMessage() {
     resolver: zodResolver(messageSchema),
   });
 
-  const messageContent = form.watch('content');
+  const messageContent = form.watch('message');
 
   const handleMessageClick = (message: string) => {
-    form.setValue('content', message);
+    form.setValue('message', message);
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +72,7 @@ export default function SendMessage() {
         title: response.data.message,
         variant: 'default',
       });
-      form.reset({ ...form.getValues(), content: '' });
+      form.reset({ ...form.getValues(), message: '' });
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -104,7 +104,7 @@ export default function SendMessage() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="content"
+            name="message"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Send Anonymous Message to @{username}</FormLabel>
@@ -126,7 +126,7 @@ export default function SendMessage() {
                 Please wait
               </Button>
             ) : (
-              <Button type="submit" disabled={isLoading || !messageContent}>
+              <Button type="submit" disabled={isLoading || !onmessage}>
                 Send It
               </Button>
             )}
